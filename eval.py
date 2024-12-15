@@ -11,7 +11,7 @@ import pickle
 url = "http://127.0.0.1:3100/process"
 
 # Load the Excel data
-file_path = 'validation.xlsx'
+file_path = 'validation_2.xlsx'
 df = pd.read_excel(file_path)
 
 json_data = []
