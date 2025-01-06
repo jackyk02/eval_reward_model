@@ -56,6 +56,7 @@ for _, row in df.iterrows():
     actions = [clean_and_parse_array(row['action0']), clean_and_parse_array(row['action1'])]
 
     rewards = get_rewards(instruction, image_path, actions)
+    print(rewards)
     win_action = 1
     if rewards[1] > rewards[0]:
         win_action = 2
