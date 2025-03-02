@@ -4,11 +4,14 @@ import pandas as pd
 import numpy as np
 import json
 from action_processing import ActionTokenizer
+from token2action import TokenActionConverter
 import requests
 import numpy as np
 import json_numpy as json
 import pickle
 url = "http://127.0.0.1:3100/process"
+converter = TokenActionConverter()
+
 
 # Load the Excel data
 file_path = 'validation_2.xlsx'
@@ -18,24 +21,20 @@ json_data = []
 
 def tokenize_from_str(action):
     action = action.replace('\n', '')
-    # Split by whitespace and filter out empty strings
-    action_values = [x for x in action.strip(
-        '[]').replace(',', ' ').split() if x]
+    action_values = [x for x in action.strip('[]').replace(',', ' ').split() if x]
     action_arr = np.array([float(x) for x in action_values])
-    # print(action_arr)
-    return action_arr
+    return converter.action_to_token(action_arr)
 
 def get_rewards(instruction, image_path, actions):
+    print(actions)
     payload = {
         "instruction": instruction,
         "image_path": image_path,
         "action": actions
     }
-
     response = requests.post(url, data=json.dumps(payload))
     response = json.loads(response.text)
-    rewards = response["rewards"]
-    return rewards
+    return response['rewards']
 
 
 with open("instruction_dict.pkl", "rb") as f:
